@@ -1,0 +1,73 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+
+        
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Basic Table</h4>
+          <form action="">
+            <div class="form-group">
+              <label for="exampleSelectGender">Filter by</label>
+              <select name="filter" class="form-control" id="exampleSelectGender">
+                <option value="null">--Select--</option>
+                <option value="name">Name</option>
+                <option value="cat">Category</option>
+                <option value="less">Price less than</option>
+                <option value="more">Price more than</option>
+              </select>
+              <div class="form-group">
+                <label for="exampleInputPassword4">Value</label>
+                <input name="key" type="text" class="form-control" id="exampleInputPassword4" placeholder="Stock">
+              </div>
+            </div>
+            
+          </form>
+          <div style="width: 250px;">
+            <a href="/media/products.csv"><button type="button" class="btn btn-primary btn-lg btn-block">
+              <i class="mdi mdi-download"></i> Download list </button></a>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Image 1</th>
+                  <th>Image 2</th>
+                  <th>Image 3</th>
+                  
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Category</th>
+                  <th>Vendor ID</th>
+                  <th>Product Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in datas %}
+                <tr>
+                  <td>{{i.product_name}}</td>
+                  <td><img src="media/{{i.product_image1}}" alt="" style="height: 100px; width: 100px;"></td>
+                  <td><img src="media/{{i.product_image2}}" alt="" style="height: 100px; width: 100px;"></td>
+                  <td><img src="media/{{i.product_image3}}" alt="" style="height: 100px; width: 100px;"></td>
+                  
+                  <td>{{i.price}}</td>
+                  <td>{{i.stock}}</td>
+                  <td>{{i.pcategory}}</td>
+                  <td>{{i.vendor_id}}</td>
+                  <td style="width: 200px;">{{i.product_description}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Update Profile</h4>
+                    <form action="{% url 'updusr' userid=user.id %}" method="POST"  class="forms-sample" enctype="multipart/form-data">
+                        {% csrf_token %}
+                      <div class="form-group">
+                        <label for="exampleInputName1">First Name</label>
+                        <input name="first_name" type="text" class="form-control" id="exampleInputName1" value="{{datas.first_name}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputName1">Last Name</label>
+                        <input name="last_name" type="text" class="form-control" id="exampleInputName1" value="{{datas.last_name}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail3">Email address</label>
+                          <input type="email" class="form-control" id="exampleInputEmail3" value="{{datas.email}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail3">Contact Number</label>
+                          <input name="phone" type="number" class="form-control" id="exampleInputEmail3" value="{{datas.phone}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword4">Password</label>
+                        <input type="newpassword" class="form-control" id="exampleInputPassword4" value="Password">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleSelectGender">Gender</label>
+                        <select name="gender" class="form-control" id="exampleSelectGender" value="{{datas.gender}}">
+                          <option>--Select--</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Address</label>
+                        <input type="text"  name="" id=""  class="form-control" value="{{datas.address}}" id="exampleTextarea1" rows="4">
+                      </div>
+                      <div class="form-group">
+                        <label>File upload</label>
+                        <input id="imageupload" type="file" name="image" class="file-upload-default" >
+                        <div class="input-group col-xs-12">
+                          <input type="text" class="form-control file-upload-info" disabled value="{{datas.image}}">
+                          <span class="input-group-append">
+                          <button  class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                          </span>
+                        </div>
+                      </div>
+                      
+                      
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button class="btn btn-dark">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+
+        
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Basic Table</h4>
+          </p>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Email Address</th>
+                  <th>Contact Number</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in k %}
+                <tr>
+                  <td><img src="media/{{i.image}}" alt="No Image" style="height: 100px; width: 100px;"></td>
+                  <td>{{i.first_name}} {{i.last_name}}</td>
+                  <td>{{i.email}}</td>
+                  <td>{{i.phone}}</td>
+                  
+                  <td><a href="{% url 'delusr' userid=i.id %}" style="text-decoration: none;color: aliceblue;"><i class="fa fa-trash"></i></a></td>
+                  <td><a href="{% url 'updusr' userid=i.id %}" style="text-decoration: none;color: aliceblue;"><i class="fa fa-edit" ></i></a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+{% endblock %}

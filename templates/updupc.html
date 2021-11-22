@@ -1,0 +1,33 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+
+          <div class="content-wrapper">
+
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add order</h4>
+                    <form action="{% url 'updupc' userid=id %}" method="POST" class="forms-sample" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label>File upload</label>
+                        <input id="imageupload" type="file" name="image" class="file-upload-default" required>
+                        <div class="input-group col-xs-12">
+                          <input type="text" class="form-control file-upload-info" disabled value="{{datas.image}}">
+                          <span class="input-group-append">
+                          <button  class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                          </span>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <a href="{% url 'disusr' %}"><button class="btn btn-dark">Cancel</button></a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+
+        
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Basic Table</h4>
+          </p>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email Address</th>
+                  <th>Password</th>
+                  <th>Branch</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>GST</th>
+                  <th>Url</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in datas %}
+                <tr>
+                  <td>{{i.vname}}</td>
+                  <td>{{i.vemail}}</td>
+                  <td>{{i.vpassword}}</td>
+                  <td>{{i.vbranch}}</td>
+                  <td>{{i.vaddress}}</td>
+                  <td>{{i.vphone}}</td>
+                  <td>{{i.vgst}}</td>
+                  <td>{{i.vurl}}</td>
+                </tr>
+                {% endfor %}
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+{% endblock %}

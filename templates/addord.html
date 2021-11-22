@@ -1,0 +1,44 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block content %}
+
+          <div class="content-wrapper">
+
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add order</h4>
+                    <form action="{% url 'addord' %}" method="POST" class="forms-sample">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="exampleInputName1">Order Total</label>
+                        <input name="order_total" type="text" class="form-control" id="exampleInputName1" placeholder="Order Total">
+                      </div>
+                      <div class="form-group">
+                        <!-- <label for="exampleInputName1">Customer ID</label>
+                        <input  type="text" class="form-control" id="exampleInputName1" placeholder="Customer ID">
+                      </div> -->
+                      <div class="form-group">
+                        <label for="exampleSelectGender">Customer ID</label>
+                        <select name="customer_id" class="form-control" id="exampleSelectGender">
+                          <option>--Select--</option>
+                          {% for i in data %}
+                          <option value="{{i.id}}">{{i.first_name}} {{i.last_name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <!-- <div class="form-group">
+                        <label for="exampleInputName1">Delivery Date</label>
+                        <input name="delivery_date" type="date" class="form-control" id="exampleInputName1">
+                      </div> -->
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button class="btn btn-dark">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+{% endblock %}
