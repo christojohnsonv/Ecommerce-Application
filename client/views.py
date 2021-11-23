@@ -234,6 +234,7 @@ def userhome(request):
 
 def usershop(request):
     prod=product.objects.all()
-    return render(request,'usershop.html',{'pro':prod})
+    ca=category.objects.all()
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
 
 
