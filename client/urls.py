@@ -25,8 +25,6 @@ urlpatterns = [
     path('discar',views.discar,name='discar'),
     path('userlogin',views.userlogin,name='userlogin'),
     path('usersignup',views.usersignup,name='usersignup'),
-    path('userhome',views.userhome,name='userhome'),
-    path('usershop',views.usershop,name="usershop"),
     path('disordrest',apiviews.disordrest,name='disordrest')
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

@@ -24,6 +24,21 @@ urlpatterns = [
     path('discat',views.discat,name='discat'),
     path('addpro',views.addpro,name="addpro"),
     path("dispro",views.dispro,name="dispro"),
+    path('userhome',views.userhome,name='userhome'),
+    path('usershop',views.usershop,name="usershop"),
+    path('usershopfilter<int:catid>',views.usershopfilter,name='usershopfilter'),
+    path('add2cart<int:proid>',views.add2cart,name="add2cart"),
+    path('discart',views.discart,name="discart"),
+    path('userprofiledis',views.userprofiledis,name='userprofiledis'),
+    path('userprofileupd',views.userprofileupd,name='userprofileupd'),
+    path('userpasswordupd',views.userpasswordupd,name='userpasswordupd'),
+    path('userabout',views.userabout,name='userabout'),
+    path('userservice',views.userservice,name='userservice'),
+    path('userpricefilter',views.userpricefilter,name='userpricefilter'),
+    path('usershopsearch',views.usershopsearch,name="usershopsearch"),
+    path('usershopsort',views.usershopsort,name="usershopsort"),
+    path('delcart<int:car_id>',views.delcart,name="delcart")
+
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 

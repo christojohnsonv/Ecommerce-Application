@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 
 from vendor.models import vendor
-from .models import category
+from .models import cart, category
 
 from django.core.files.storage import FileSystemStorage
 from django.db.models.fields import files
@@ -14,6 +14,7 @@ from product.models import category, product
 import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 def addcat(request):
@@ -29,6 +30,8 @@ def addcat(request):
 def discat(request):
     obj=category.objects.all()
     return render(request,"discat.html",{'datas':obj})
+
+
 
 
 
@@ -66,16 +69,13 @@ def addpro(request):
         product.objects.create(product_name=na,product_image1=fp1,product_image2=fp2,product_image3=fp3,product_description=pd,price=pr,stock=st,pcategory=ca,vendor_id=vd)
     return render(request,"addpro.html",{'cat':obj,"vend":ven})
 
+
+
+
 def discat(request):
     obj=category.objects.all()
     return render(request,"discat.html",{'datas':obj})
 
-def dispro(request):
-    obj=product.objects.all()
-    df=pd.DataFrame(obj.values())
-    path=os.path.join(BASE_DIR,'media/products.csv')
-    df.to_csv(path)
-    return render(request,"dispro.html",{"datas":obj})
 
 def dispro(request):
     obj=product.objects.all()
@@ -83,6 +83,18 @@ def dispro(request):
     path=os.path.join(BASE_DIR,'media/products.csv')
     df.to_csv(path)
     return render(request,"dispro.html",{"datas":obj})
+
+
+
+
+def dispro(request):
+    obj=product.objects.all()
+    df=pd.DataFrame(obj.values())
+    path=os.path.join(BASE_DIR,'media/products.csv')
+    df.to_csv(path)
+    return render(request,"dispro.html",{"datas":obj})
+
+
 
 
 def filterpro(request):
@@ -101,3 +113,133 @@ def filterpro(request):
             if by=="more":
                 result=pd.DataFrame(product.objects.filter(price__gte=int(key)))
     return render(request,"dispro.html")
+
+
+
+
+def userhome(request):
+    user_email=request.user.email
+    car=cart.objects.filter(user_id=user_email)
+    ca=category.objects.all()
+    df=product.objects.filter(price__gte=100000)
+    return render(request,"userhome.html",{'cat':ca,'pro':df,'cart':car})
+
+def usershop(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+
+def usershopsearch(request):
+    global catfilter
+    prod=product.objects.all()
+    ca=category.objects.all()
+    if request.method=="POST":
+        key=request.POST.get("searchkey")
+    prod=product.objects.filter(product_description__contains=key)
+    catfilter=prod
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+
+def usershopfilter(request,catid):
+    global catfilter
+    catfilter=product.objects.all()
+    ca=category.objects.all()
+    temp=category.objects.get(id=catid)
+    catfilter=product.objects.filter(pcategory__category_name=temp)
+    prod=catfilter    
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+
+
+def userpricefilter(request):
+    global catfilter
+    prod=catfilter
+    ca=category.objects.all()
+    if request.method=="POST":
+        low=request.POST.get("low")
+        high=request.POST.get("high")
+        if low=="":
+            if high=="":
+                prod=catfilter
+            else:
+                prod=catfilter.filter(price__lte=high)
+        else:
+            if high=="":
+                prod=catfilter.filter(price__gte=low)
+            else:
+                prod=catfilter.filter(price__gte=low,price__lte=high)
+    catfilter=prod
+    return render(request,'usershop.html',{'pro':prod,'cat':ca,"h":high,"l":low})
+
+
+
+
+
+
+def usershopsort(request):
+    prod=catfilter
+    ca=category.objects.all()
+    if request.method=="POST":
+        key=request.POST.get("sortkey")
+        if key=="":
+            prod=catfilter
+        elif key=="2":
+            prod=prod.order_by('price')
+            prod=prod.reverse()
+        elif key=="3":
+            prod=prod.order_by('price')
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+
+
+def discart(request):
+    user=request.user.email
+    prod=cart.objects.filter(user_id=user)
+    ca=category.objects.all()
+    return render(request,'usercart.html',{'pro':prod,'cat':ca})
+
+
+
+
+
+
+def add2cart(request,proid):
+    prod=product.objects.all()
+    prod_var=product.objects.get(id=proid)
+    ca=category.objects.all()
+    user_mail=request.user.email
+    cart.objects.create(product_id=prod_var,product_qty=1,user_id=user_mail)
+    return redirect("usershop")
+    return render(request,'usercart.html',{'pro':prod,'cat':ca})
+
+def userwish(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'userwishlist.html',{'pro':prod,'cat':ca})
+
+def userprofiledis(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+
+def userprofileupd(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'usermy-account.html',{'pro':prod,'cat':ca})
+
+def userpasswordupd(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'usermy-account.html',{'pro':prod,'cat':ca})
+
+def userabout(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'userabout.html',{'pro':prod,'cat':ca})
+
+def userservice(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'userservice.html',{'pro':prod,'cat':ca})
+
+def delcart(request,car_id):
+    obj=cart.objects.get(id=car_id)
+    obj.delete()
+    return redirect("discart")

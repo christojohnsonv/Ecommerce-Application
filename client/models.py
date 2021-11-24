@@ -3,8 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.db.models import CASCADE
-from product.models import *
-from vendor.models import *
+from product.models import product
+from vendor.models import vendor
 
 
 class UserManager(BaseUserManager):

@@ -224,17 +224,4 @@ def usersignup(request):
         User.objects.create_user(first_name=fna,last_name=lna,email=em,password=pw)
         return redirect("userlogin")
     return render(request,"auth-signup.html")
-
-def userhome(request):
-    ca=category.objects.all()
-    df=product.objects.filter(price__gte=100000)
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(df)
-    return render(request,"userhome.html",{'cat':ca,'pro':df})
-
-def usershop(request):
-    prod=product.objects.all()
-    ca=category.objects.all()
-    return render(request,'usershop.html',{'pro':prod,'cat':ca})
-
-
+   

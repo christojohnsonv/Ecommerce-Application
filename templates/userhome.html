@@ -99,14 +99,14 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                    <a class="navbar-brand" href="index.html"><img src="../static/user/images/logo.png" class="logo" alt=""></a>
+                    <a class="navbar-brand" href="{% url 'userhome' %}"><img src="../static/user/images/logo.png" class="logo" alt=""></a>
                 </div>
                 <!-- End Header Navigation -->
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                        <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'userhome' %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
                         <li class="dropdown megamenu-fw">
                             <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">Categories</a>
@@ -115,7 +115,7 @@
                                     <div class="row">
                                         {% for i in cat %}
                                         <div class="col-menu col-md-3">
-                                            <a href="#"><h6 class="title">{{i.category_name}}</h6></a>
+                                            <a href="{% url 'usershopfilter' catid=i.id %}"><h6 class="title">{{i.category_name}}</h6></a>
                                             <div class="content">
                                                 <ul class="menu-col">
                                                     
@@ -134,13 +134,13 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="{% url 'usershop' %}" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
+                            <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                             <ul class="dropdown-menu">
                                 <li><a href="cart.html">Cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
+                                
                                 <li><a href="my-account.html">My Account</a></li>
                                 <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="shop-detail.html">Shop Detail</a></li>
+                                
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="service.html">Our Service</a></li>
@@ -168,23 +168,15 @@
                 <a href="#" class="close-side"><i class="fa fa-times"></i></a>
                 <li class="cart-box">
                     <ul class="cart-list">
+                        {% for i in cart %}
                         <li>
-                            <a href="#" class="photo"><img src="../static/user/images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Delica omtantur </a></h6>
-                            <p>1x - <span class="price">$80.00</span></p>
+                            <a href="#" class="photo"><img src="/media/{{i.product_id.product_image1}}" class="cart-thumb" alt="" /></a>
+                            <h6><a href="#">{{i.product_id}}</a></h6>
+                            <p>1x - <span class="price">{{i.product_id.price}}</span></p>
                         </li>
-                        <li>
-                            <a href="#" class="photo"><img src="../static/user/images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Omnes ocurreret</a></h6>
-                            <p>1x - <span class="price">$60.00</span></p>
-                        </li>
-                        <li>
-                            <a href="#" class="photo"><img src="../static/user/images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Agam facilisis</a></h6>
-                            <p>1x - <span class="price">$40.00</span></p>
-                        </li>
+                        {% endfor %}
                         <li class="total">
-                            <a href="#" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                            <a href="{% url 'discart'%}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
                             <span class="float-right"><strong>Total</strong>: $180.00</span>
                         </li>
                     </ul>
@@ -197,15 +189,19 @@
     <!-- End Main Top -->
 
     <!-- Start Top Search -->
+    <form action="{% url 'usershopsearch' %}" method="POST">
+        {% csrf_token %}
     <div class="top-search">
         <div class="container">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
+                <input name="searchkey" type="text" class="form-control" placeholder="Search">
+                <button type="submit"> <i class="fa fa-search"></i> </button>
                 <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
             </div>
         </div>
     </div>
+    </form>
     <!-- End Top Search -->
     <!-- {% block content %}
     <!-- Start Slider -->
@@ -269,7 +265,7 @@
                     
                         <img class="img-fluid" src="../media/{{i.category_image}}" alt="" style="background-position: center;height: 250px;width: 300px;"/>
                         </div>
-                        <a class="btn hvr-hover" href="#">{{i.category_name}}</a>
+                        <a class="btn hvr-hover" href="{% url 'usershopfilter' catid=i.id %}">{{i.category_name}}</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -303,7 +299,7 @@
                                 <ul>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                 </ul>
-                                <a class="cart" href="#">Add to Cart</a>
+                                <a class="cart" href="{% url 'add2cart' proid=i.id  %}">Add to Cart</a>
                             </div>
                         </div>
                         <div class="why-text">
