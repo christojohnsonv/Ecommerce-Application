@@ -33,15 +33,17 @@
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th>Remove</th>
+                                    <th>Remove / Update</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for i in pro %}
+                                <form action="{% url 'updcart' cid=i.id %}" method="POST">
+                                    {% csrf_token %}
                                 <tr>
                                     <td class="thumbnail-img">
                                         <a href="#">
-									<img class="img-fluid" src="/media/{{i.product_id.product_image1}}" alt="" />
+									<img style="height: 150px;width: 150px;" class="img-fluid" src="/media/{{i.product_id.product_image1}}" alt="" />
 								</a>
                                     </td>
                                     <td class="name-pr">
@@ -52,7 +54,7 @@
                                     <td class="price-pr">
                                         <p>{{i.product_id.price}}</p>
                                     </td>
-                                    <td class="quantity-box"><input type="number" size="4" value="1" min="0" step="1" class="c-input-text qty text"></td>
+                                    <td class="quantity-box"><input name="qty" type="number" size="4" value="{{i.product_qty}}" min="0" step="1" class="c-input-text qty text"></td>
                                     <td class="total-pr">
                                         <p>{{i.total}}</p>
                                     </td>
@@ -60,8 +62,14 @@
                                         <a href="{% url 'delcart' car_id=i.id %}">
 									<i class="fas fa-times"></i>
 								</a>
+                                <div class="update-box">
+                                    <input value="Update" type="submit">
+                                </div>
                                     </td>
+                                    
                                 </tr>
+                                
+                                </form>
                                 {% endfor %}
                                 
                             </tbody>
@@ -70,23 +78,7 @@
                 </div>
             </div>
 
-            <div class="row my-5">
-                <div class="col-lg-6 col-sm-6">
-                    <div class="coupon-box">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
-                            <div class="input-group-append">
-                                <button class="btn btn-theme" type="button">Apply Coupon</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-sm-6">
-                    <div class="update-box">
-                        <input value="Update Cart" type="submit">
-                    </div>
-                </div>
-            </div>
+
 
             <div class="row my-5">
                 <div class="col-lg-8 col-sm-12"></div>
@@ -95,21 +87,13 @@
                         <h3>Order summary</h3>
                         <div class="d-flex">
                             <h4>Sub Total</h4>
-                            <div class="ml-auto font-weight-bold"> $ 130 </div>
+                            <div class="ml-auto font-weight-bold"> {{ subt }} </div>
                         </div>
                         <div class="d-flex">
                             <h4>Discount</h4>
-                            <div class="ml-auto font-weight-bold"> $ 40 </div>
+                            <div class="ml-auto font-weight-bold"> -- </div>
                         </div>
-                        <hr class="my-1">
-                        <div class="d-flex">
-                            <h4>Coupon Discount</h4>
-                            <div class="ml-auto font-weight-bold"> $ 10 </div>
-                        </div>
-                        <div class="d-flex">
-                            <h4>Tax</h4>
-                            <div class="ml-auto font-weight-bold"> $ 2 </div>
-                        </div>
+                        
                         <div class="d-flex">
                             <h4>Shipping Cost</h4>
                             <div class="ml-auto font-weight-bold"> Free </div>
@@ -117,11 +101,11 @@
                         <hr>
                         <div class="d-flex gr-total">
                             <h5>Grand Total</h5>
-                            <div class="ml-auto h5"> $ 388 </div>
+                            <div class="ml-auto h5"> {{ subt }} </div>
                         </div>
                         <hr> </div>
                 </div>
-                <div class="col-12 d-flex shopping-box"><a href="checkout.html" class="ml-auto btn hvr-hover">Checkout</a> </div>
+                <div class="col-12 d-flex shopping-box"><a href="{% url 'usercheckout' %}" class="ml-auto btn hvr-hover">Checkout</a> </div>
             </div>
 
         </div>

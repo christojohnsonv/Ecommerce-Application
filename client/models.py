@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.db.models import CASCADE
+from django.db.models.base import Model
+from numpy import mod
 from product.models import product
 from vendor.models import vendor
 
@@ -101,4 +103,9 @@ class cart(models.Model):
     product_id=models.CharField(max_length=40,null=True)
     product_no=models.IntegerField(null=True)
     email_id=models.EmailField(null=True)
-    
+
+
+
+class delivery_agent(models.Model):
+    dname=models.CharField(max_length=40,null=True)
+    dplace=models.CharField(max_length=40,null=True)

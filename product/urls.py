@@ -37,7 +37,11 @@ urlpatterns = [
     path('userpricefilter',views.userpricefilter,name='userpricefilter'),
     path('usershopsearch',views.usershopsearch,name="usershopsearch"),
     path('usershopsort',views.usershopsort,name="usershopsort"),
-    path('delcart<int:car_id>',views.delcart,name="delcart")
+    path('delcart<int:car_id>',views.delcart,name="delcart"),
+    path("updcart<int:cid>",views.updcart,name="updcart"),
+    path("usercheckout",views.usercheckout,name="usercheckout"),
+    path('userwish<int:proid>',views.userwish,name="userwish"),
+    path('diswish',views.diswish,name="diswish"),
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

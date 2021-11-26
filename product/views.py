@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 
 from vendor.models import vendor
-from .models import cart, category
+from .models import cart, category, wishlist
 
 from django.core.files.storage import FileSystemStorage
 from django.db.models.fields import files
@@ -149,6 +149,9 @@ def usershopfilter(request,catid):
     return render(request,'usershop.html',{'pro':prod,'cat':ca})
 
 
+
+
+
 def userpricefilter(request):
     global catfilter
     prod=catfilter
@@ -189,12 +192,6 @@ def usershopsort(request):
     return render(request,'usershop.html',{'pro':prod,'cat':ca})
 
 
-def discart(request):
-    user=request.user.email
-    prod=cart.objects.filter(user_id=user)
-    ca=category.objects.all()
-    return render(request,'usercart.html',{'pro':prod,'cat':ca})
-
 
 
 
@@ -205,14 +202,46 @@ def add2cart(request,proid):
     prod_var=product.objects.get(id=proid)
     ca=category.objects.all()
     user_mail=request.user.email
-    cart.objects.create(product_id=prod_var,product_qty=1,user_id=user_mail)
+    tot=prod_var.price
+    cart.objects.create(product_id=prod_var,product_qty=1,user_id=user_mail,total=tot)
     return redirect("usershop")
     return render(request,'usercart.html',{'pro':prod,'cat':ca})
 
-def userwish(request):
-    prod=product.objects.all()
+def discart(request):
+    user=request.user.email
+    prod=cart.objects.filter(user_id=user)
+    
     ca=category.objects.all()
+    sum=0
+    for i in prod:
+        sum=sum+int(i.product_id.price)
+    
+    return render(request,'usercart.html',{'pro':prod,'cat':ca,"subt":sum})
+
+
+def userwish(request,proid):
+    prod=product.objects.all()
+    prod_var=product.objects.get(id=proid)
+    ca=category.objects.all()
+    user_mail=request.user.email
+    wishlist.objects.create(product_id=prod_var,user_id=user_mail)
+    return redirect("diswish")
     return render(request,'userwishlist.html',{'pro':prod,'cat':ca})
+
+
+
+
+
+def diswish(request):
+    user=request.user.email
+    prod=wishlist.objects.filter(user_id=user)
+    
+    ca=category.objects.all()
+    return render(request,'userwishlist.html',{'pro':prod,'cat':ca,"subt":sum})
+
+
+
+
 
 def userprofiledis(request):
     prod=product.objects.all()
@@ -237,9 +266,34 @@ def userabout(request):
 def userservice(request):
     prod=product.objects.all()
     ca=category.objects.all()
+    
     return render(request,'userservice.html',{'pro':prod,'cat':ca})
+
+
+
+
+def usercheckout(request):
+    prod=product.objects.all()
+    ca=category.objects.all()
+    return render(request,'usercheckout.html',{'pro':prod,'cat':ca})
+
+
+
+
+
 
 def delcart(request,car_id):
     obj=cart.objects.get(id=car_id)
     obj.delete()
     return redirect("discart")
+
+
+
+def updcart(request,cid):
+    obj=cart.objects.filter(id=cid).values()
+    v=cart.objects.get(id=cid)
+    if request.method=="POST":
+        qty=request.POST.get("qty")
+    obj.update(product_qty=qty,total=int(qty)*int(v.product_id.price))
+    return redirect("discart")
+

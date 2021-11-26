@@ -39,5 +39,12 @@ class cart(models.Model):
     user_id=models.EmailField(max_length=40,null=True)
     total=models.IntegerField(null=True)
     
+
+
+
+class wishlist(models.Model):
+    product_id=models.ForeignKey(product,on_delete=CASCADE,null=True)
+    user_id=models.EmailField(max_length=40,null=True)
+    
     def __str__(self):
         return self.product_id

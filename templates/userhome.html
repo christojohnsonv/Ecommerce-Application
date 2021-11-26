@@ -297,7 +297,7 @@
                             <img src="media/{{i.product_image1}}" class="img-fluid" alt="Image" style="background-position: center;height: 250px;width: 300px;">
                             <div class="mask-icon">
                                 <ul>
-                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                    <li><a href="{% url 'userwish' proid=i.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                 </ul>
                                 <a class="cart" href="{% url 'add2cart' proid=i.id  %}">Add to Cart</a>
                             </div>
