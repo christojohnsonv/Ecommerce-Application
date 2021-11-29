@@ -50,7 +50,7 @@ class User(AbstractUser):
     gender=models.CharField(max_length=10,null=True)
     city=models.CharField(max_length=255,null=True,blank=True)
     phone=models.IntegerField(null=True)
-    image=models.ImageField(upload_to='images/',default='media/Image.jpg')
+    image=models.ImageField(upload_to='images/',default='Image.jpg')
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['first_name','last_name']
     objects=UserManager()

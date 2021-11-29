@@ -30,7 +30,9 @@ urlpatterns = [
     #api views
     path('disusrrest',apiviews.disusrrest,name='disusrrest'),
     path('disordrest',apiviews.disordrest,name='disordrest'),
-    path('adddela',apiviews.adddela,name="adddela")
+    path('adddela',apiviews.adddela,name="adddela"),
+    path('disdela',apiviews.disdela,name="disdela"),
+    path('upddela<int:userid>',apiviews.upddela,name="upddela")
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 

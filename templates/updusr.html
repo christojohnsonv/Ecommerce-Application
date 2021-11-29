@@ -6,9 +6,11 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Update User</h4>
-                    <div class="col-sm-6 col-md-4 col-lg-3">
-                      <img src="media/{{datas.image}}" alt="No image" style="width: 150px;height: 150px;border-radius: 50%;">
-                      <a href="{% url 'updupc' userid=datas.id %}"><button style="background-color: rgb(49, 22, 75);border-color: transparent;border-radius: 50%;position: relative;top: 60px;right: 35px;"><i class="mdi mdi-pencil" style="background-color: transparent;color: blue;color: whitesmoke;"></i></button></a>
+                    <div class="col-sm-6 col-md-4 col-lg-3" >
+                      <div style="width: 150px;height: 150px;">
+                        <img src="media/{{datas.image}}" alt="No image" style="width: 150px;height: 150px;border-radius: 50%;">
+                      </div>
+                      <a href="{% url 'updupc' userid=datas.id %}"><button style="background-color: rgb(49, 22, 75);border-color: transparent;border-radius: 50%;position: relative;bottom: 40px;left: 120px;"><i class="mdi mdi-pencil" style="background-color: transparent;color: blue;color: whitesmoke;"></i></button></a>
                     </div>
                     <div style="padding-top: 20px;padding-bottom: 20px;">
                       <a href="{% url 'updupw' userid=datas.id %}"><button type="submit" class="btn btn-primary mr-2">Update Password</button></a>

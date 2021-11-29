@@ -136,10 +136,10 @@
                         <li class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                             <ul class="dropdown-menu">
-                                <li><a href="cart.html">Cart</a></li>
+                                <li><a href="{% url 'discart'%}">Cart</a></li>
                                 
                                 <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="{% url 'diswish' %}">Wishlist</a></li>
                                 
                             </ul>
                         </li>
@@ -177,7 +177,7 @@
                         {% endfor %}
                         <li class="total">
                             <a href="{% url 'discart'%}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                            <span class="float-right"><strong>Total</strong>: $180.00</span>
+                            <span class="float-right"><strong>Total</strong>: Rs. {{subt}}</span>
                         </li>
                     </ul>
                 </li>
@@ -280,7 +280,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Featured Products</h1>
+                        <h1>My Wishlist</h1>
                     </div>
                 </div>
             </div>
@@ -294,17 +294,15 @@
                             <div class="type-lb">
                                 <p class="sale">Sale</p>
                             </div>
-                            <img src="media/{{i.product_image1}}" class="img-fluid" alt="Image" style="background-position: center;height: 250px;width: 300px;">
+                            <img src="media/{{i.product_id.product_image1}}" class="img-fluid" alt="Image" style="background-position: center;height: 250px;width: 300px;">
                             <div class="mask-icon">
-                                <ul>
-                                    <li><a href="{% url 'userwish' proid=i.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
-                                </ul>
+                                
                                 <a class="cart" href="{% url 'add2cart' proid=i.id  %}">Add to Cart</a>
                             </div>
                         </div>
                         <div class="why-text">
-                            <h4>{{i.product_name}}</h4>
-                            <h5>Rs.{{i.price}}</h5>
+                            <h4>{{i.product_id.product_name}}</h4>
+                            <h5>Rs.{{i.product_id.price}}</h5>
                         </div>
                     </div>
                 </div>

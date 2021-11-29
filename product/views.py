@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
+#Category Functions
 def addcat(request):
     if request.method=="POST":
         na=request.POST.get("name")
@@ -36,17 +37,7 @@ def discat(request):
 
 
 
-
-def addcat(request):
-    if request.method=="POST":
-        na=request.POST.get("name")
-        im=request.FILES['image']
-        f=FileSystemStorage()
-        fp=f.save(im.name,im)
-        category.objects.create(category_name=na,category_image=fp)
-    return render(request,"addcat.html")
-
-
+# Product Functions
 def addpro(request):
     obj=category.objects.all()
     ven=vendor.objects.all()
@@ -71,22 +62,6 @@ def addpro(request):
 
 
 
-
-def discat(request):
-    obj=category.objects.all()
-    return render(request,"discat.html",{'datas':obj})
-
-
-def dispro(request):
-    obj=product.objects.all()
-    df=pd.DataFrame(obj.values())
-    path=os.path.join(BASE_DIR,'media/products.csv')
-    df.to_csv(path)
-    return render(request,"dispro.html",{"datas":obj})
-
-
-
-
 def dispro(request):
     obj=product.objects.all()
     df=pd.DataFrame(obj.values())
@@ -105,29 +80,39 @@ def filterpro(request):
             return redirect("dispro")
         else:
             if by=="name":
-                result=product.objects.filter(product_name_contains=key)
-            if by=="cat":
-                result=product.objects.filter(pcategory__category=key)
+                result=product.objects.filter(product_description__contains=key)
             if by=="less":
-                result=pd.DataFrame(product.objects.filter(price__lte=int(key)))
+                result=product.objects.filter(price__lte=int(key))
             if by=="more":
-                result=pd.DataFrame(product.objects.filter(price__gte=int(key)))
-    return render(request,"dispro.html")
+                result=product.objects.filter(price__gte=int(key))
+    return render(request,"dispro.html",{'datas':result})
 
 
 
 
+# Client User Interface
+#   Client Home
 def userhome(request):
     user_email=request.user.email
     car=cart.objects.filter(user_id=user_email)
     ca=category.objects.all()
-    df=product.objects.filter(price__gte=100000)
-    return render(request,"userhome.html",{'cat':ca,'pro':df,'cart':car})
+    df=wishlist.objects.filter(user_id=user_email)
+    sum=0
+    for i in car:
+        sum=sum+int(i.total)
+    
+    return render(request,"userhome.html",{'cat':ca,'pro':df,'cart':car,'subt':sum})
 
+#   Client Shop
 def usershop(request):
     prod=product.objects.all()
     ca=category.objects.all()
-    return render(request,'usershop.html',{'pro':prod,'cat':ca})
+    car=cart.objects.filter(user_id=request.user.email)
+    sum=0
+    for i in car:
+        sum=sum+int(i.total)
+    
+    return render(request,'usershop.html',{'pro':prod,'cat':ca,'cart':car,'subt':sum})
 
 def usershopsearch(request):
     global catfilter
@@ -147,9 +132,6 @@ def usershopfilter(request,catid):
     catfilter=product.objects.filter(pcategory__category_name=temp)
     prod=catfilter    
     return render(request,'usershop.html',{'pro':prod,'cat':ca})
-
-
-
 
 
 def userpricefilter(request):
@@ -197,6 +179,7 @@ def usershopsort(request):
 
 
 
+#   Client Cart Funtions
 def add2cart(request,proid):
     prod=product.objects.all()
     prod_var=product.objects.get(id=proid)
@@ -210,15 +193,38 @@ def add2cart(request,proid):
 def discart(request):
     user=request.user.email
     prod=cart.objects.filter(user_id=user)
-    
+    car=cart.objects.filter(user_id=request.user.email)
     ca=category.objects.all()
     sum=0
     for i in prod:
-        sum=sum+int(i.product_id.price)
+        sum=sum+int(i.total)
     
-    return render(request,'usercart.html',{'pro':prod,'cat':ca,"subt":sum})
+    return render(request,'usercart.html',{'pro':prod,'cat':ca,"subt":sum,'cart':car})
 
 
+
+
+def delcart(request,car_id):
+    obj=cart.objects.get(id=car_id)
+    obj.delete()
+    return redirect("discart")
+
+
+
+
+
+
+def updcart(request,cid):
+    obj=cart.objects.filter(id=cid).values()
+    v=cart.objects.get(id=cid)
+    if request.method=="POST":
+        qty=request.POST.get("qty")
+    obj.update(product_qty=qty,total=int(qty)*int(v.product_id.price))
+    return redirect("discart")
+
+
+
+#       Client Wishlist Functions
 def userwish(request,proid):
     prod=product.objects.all()
     prod_var=product.objects.get(id=proid)
@@ -239,6 +245,22 @@ def diswish(request):
     ca=category.objects.all()
     return render(request,'userwishlist.html',{'pro':prod,'cat':ca,"subt":sum})
 
+
+
+
+
+def wish2cart(request,proid):
+    prod=product.objects.all()
+    prod_var=product.objects.get(id=proid)
+    ca=category.objects.all()
+    user_mail=request.user.email
+    tot=prod_var.price
+    cart.objects.create(product_id=prod_var,product_qty=1,user_id=user_mail,total=tot)
+    wpro=wishlist.objects.get(id=proid)
+    wpro.delete()
+    return redirect("discart")
+    return render(request,'userwishlist.html',{'pro':prod,'cat':ca})
+    
 
 
 
@@ -275,25 +297,17 @@ def userservice(request):
 def usercheckout(request):
     prod=product.objects.all()
     ca=category.objects.all()
-    return render(request,'usercheckout.html',{'pro':prod,'cat':ca})
+    user=request.user.email
+    prod=cart.objects.filter(user_id=user)
+    
+    ca=category.objects.all()
+    sum=0
+    for i in prod:
+        sum=sum+int(i.total)
+    
+    return render(request,'usercheckout.html',{'pro':prod,'cat':ca,"subt":sum})
 
 
 
 
-
-
-def delcart(request,car_id):
-    obj=cart.objects.get(id=car_id)
-    obj.delete()
-    return redirect("discart")
-
-
-
-def updcart(request,cid):
-    obj=cart.objects.filter(id=cid).values()
-    v=cart.objects.get(id=cid)
-    if request.method=="POST":
-        qty=request.POST.get("qty")
-    obj.update(product_qty=qty,total=int(qty)*int(v.product_id.price))
-    return redirect("discart")
 
